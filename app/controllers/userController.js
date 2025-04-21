@@ -42,14 +42,8 @@ export const userController = {
         if (role) { user.role = role };
         if (verified) { user.verified = verified };
 
-        // Enregistrer en BDD les modifications.
-        await user.save();
-
-        // Exclure le mot de passe des données à renvoyer.
-        const { password, ...userWithoutPassword } = user.get({ plain: true });
-
-        // Renvoyer les données à jour sans le mot de passe.
-        res.status(200).json(userWithoutPassword);
+        // Renvoyer les données à jour sans le mot de passe (car exclus de la requête API).
+        res.status(200).json(user);
     },
 
     async delete(req, res) {
@@ -77,5 +71,22 @@ export const userController = {
         });
 
         res.status(200).json(user);
+    },
+
+    async editMe(req, res) {
+        const userId = req.user.id;
+        const user = await User.findByPk(userId, {
+            attributes: { exclude: ["password"] }
+        });
+
+        const { firstname, lastname, email, password } = req.body;
+        if (firstname) { user.firstname = firstname };
+        if (lastname) { user.lastname = lastname };
+        if (email) { user.email = email };
+        if (password) { user.password = password };
+
+        await user.save();
+
+        res.status(200).json(user)
     }
 }

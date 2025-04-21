@@ -14,6 +14,7 @@ router.get("/private", isAuthed, (req, res) => {
     res.status(200).json({ message: `Hello ${req.user.firstname}` });
 });
 router.get("/me", isAuthed, cw(userController.getMe));
+router.patch("/me", isAuthed, cw(userController.editMe));
 
 // Routes Admin.
 router.get("/users", isAuthed, isAdmin, cw(userController.getAll));
