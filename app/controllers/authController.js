@@ -19,6 +19,7 @@ export const authController = {
         }
 
         const hashedPassword = user.password; // Mot de passe hashé stocké en BDD.
+        
         // Comparer la saisie utilisateur et le mot de passe hashé.
         const isMatching = await argon2.verify(hashedPassword, password);
 
@@ -32,7 +33,7 @@ export const authController = {
             process.env.JWT_SECRET,
             { expiresIn: "1h"}
         );
-
-        res.status(200).json({ message: `Hello ${user.firstname}`, token });
+        
+        res.status(200).json({ token });
     }
 }
