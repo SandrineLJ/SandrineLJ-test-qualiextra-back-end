@@ -18,6 +18,11 @@ export const authController = {
         if (!user) {
             return res.status(400).json({ error: "Email ou mot de passe incorrect." });
         }
+        
+        // S'assurer que l'utilisateur est vérifier.
+        if (!user.isVerified) {
+            return res.status(403).json({ message: "Veuillez valider votre adresse mail." })
+        }
 
         const hashedPassword = user.password; // Mot de passe hashé stocké en BDD.
         
@@ -79,5 +84,40 @@ export const authController = {
 
         await sendVerificationEmail(email, verificationToken, firstname)
         res.status(201).json({ message: "Compte créé avec succès. Veuillez consulter votre boîte mail pour vérifier votre compte." })
+    },
+
+    async verifyUser(req, res) {
+        const { token } = req.query;
+
+        if (!token) {
+            return res.status(400).json({ message: "Token manquant"} );
+        }
+
+        try {
+            // Décoder le token de vérification.
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+            // Comparer l'email décodé avec la BDD.
+            const user = await User.findOne({ where: { email: decoded.email } });
+
+            if (!user) {
+                return res.status(404).json({ message: "Utilisateur inconnu." });
+            }
+
+            // Vérifier si l'utilisateur est déjà vérifié.
+            if (user.isVerified === true) {
+                return res.status(400).json({ message: "Utilisateur déjà vérifié." });
+            }
+
+            // Mettre à jour l'utilisateur en BDD.
+            user.isVerified = true;
+            user.verificationToken = null;
+            await user.save();
+
+            res.status(200).json({ message: "Email vérifié avec succès."})
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Une erreur est survenue lors de la vérification de l'email, merci de réessayer plus tard." })
+        }
     }
 }

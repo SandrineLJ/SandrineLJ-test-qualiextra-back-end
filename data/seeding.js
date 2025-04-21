@@ -9,7 +9,7 @@ try {
             email: "admin@admin.fr",
             password: "adminPassword123",
             role: "admin",
-            verified: true,
+            isVerified: true,
         },
         {
             firstname: "Member",
@@ -17,7 +17,7 @@ try {
             email: "member@user.com",
             password: "member123",
             role: "member",
-            verified: true,
+            isVerified: true,
         }
     ]);
     console.log("Seeding database succesfully.");

@@ -28,7 +28,7 @@ User.init(
             allowNull: false,
             defaultValue: "member"
           },
-          verified: {
+          isVerified: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
           },

@@ -13,6 +13,7 @@ export const sendVerificationEmail = async (to, token, firstname) => {
     // Créer le lien de vérification.
     const verificationLink = `http://localhost:3000/verify?token=${token}`;
 
+    // Envoyer le lien de vérification par mail.
     await transporter.sendMail({
         from: '"Mon App" <noreply@sandbox.smtp.mailtrap.io',
         to,
