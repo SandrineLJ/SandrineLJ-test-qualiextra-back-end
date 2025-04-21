@@ -41,6 +41,18 @@ export const userController = {
 
         // Retourner les données de l'utilisateur à jour.
         res.status(200).json(user);
+    },
 
+    async delete(req, res) {
+        const userId = parseInt(req.params.id);
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: `L'utilisateur ${userId} n'existe pas.`});
+        }
+
+        await user.destroy();
+
+        res.status(204).json({ message: `Utilisateur ${userId} supprimé.` });
     }
 }
