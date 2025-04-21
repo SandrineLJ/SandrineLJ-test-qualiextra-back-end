@@ -1,9 +1,11 @@
 import { Router } from "express";
 import { authController } from "./controllers/authController.js";
+import { adminController } from "./controllers/adminController.js";
+import { userController } from "./controllers/userController.js";
 import { cw } from "./middlewares/controllerWrapper.js"
 import { isAuthed } from "./middlewares/isAuthed.js";
-import { userController } from "./controllers/userController.js";
 import { isAdmin } from "./middlewares/isAdmin.js";
+
 
 export const router = Router();
 
@@ -19,7 +21,7 @@ router.get("/me", isAuthed, cw(userController.getMe));
 router.patch("/me", isAuthed, cw(userController.editMe));
 
 // Routes Admin.
-router.get("/users", isAuthed, isAdmin, cw(userController.getAll));
-router.get("/users/:id", isAuthed, isAdmin, cw(userController.getOne));
-router.patch("/users/:id", isAuthed, isAdmin, cw(userController.edit));
-router.delete("/users/:id", isAuthed, isAdmin, cw(userController.delete));
+router.get("/users", isAuthed, isAdmin, cw(adminController.getAllUsers));
+router.get("/users/:id", isAuthed, isAdmin, cw(adminController.getOneUser));
+router.patch("/users/:id", isAuthed, isAdmin, cw(adminController.editUser));
+router.delete("/users/:id", isAuthed, isAdmin, cw(adminController.deleteUser));
