@@ -32,6 +32,9 @@ User.init(
             type: DataTypes.BOOLEAN,
             defaultValue: false
           },
+          verificationToken: {
+            type: DataTypes.TEXT,
+          }
     }, {
         sequelize,
         tableName: "user",

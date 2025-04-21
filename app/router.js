@@ -8,6 +8,7 @@ import { isAdmin } from "./middlewares/isAdmin.js";
 export const router = Router();
 
 router.post("/login", cw(authController.loginUser));
+router.post("/signup", cw(authController.registerUser));
 
 // Routes utilisateurs authentifiés (Admin ou standards).
 router.get("/private", isAuthed, (req, res) => {

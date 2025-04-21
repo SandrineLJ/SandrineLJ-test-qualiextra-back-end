@@ -1,6 +1,7 @@
 import { User } from "../models/User.js";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
+import { sendVerificationEmail } from "../utils/mailer.js";
 
 export const authController = {
     async loginUser(req, res) {
@@ -35,5 +36,48 @@ export const authController = {
         );
         
         res.status(200).json({ token });
+    },
+
+    async registerUser(req, res) {
+        const { firstname, lastname, email, password, confirmPassword } = req.body;
+
+        // S'assurer que tous les champs sont remplis.
+        if (!firstname || !lastname || !email || !password || !confirmPassword) {
+            res.status(400).json({ message: "Tous les champs sont obligatoires." });
+        }
+
+        // Vérifier que le mot de passe et sa confirmation sont identiques.
+        if (password !== confirmPassword) {
+            res.status(400).json({ message: "Le mot de passe et sa confirmation doivent être identiques."} )
+        }
+
+        // Vérifier si un utilisateur avec la même adresse email existe dans notre BDD.
+        const existingUser = await User.findOne({
+            where: { email: email }
+        });
+
+        if (existingUser) {
+            return res.status(409).json({ message: "L'email renseigné est déjà utilisé." });
+        }
+
+        // Générer le token de vérification que l'on va stocker en BDD pour comparaison au moment de la validation par l'utilisateur.
+        const verificationToken = jwt.sign(
+            { email },
+            process.env.JWT_SECRET,
+            { expiresIn: "12h" }
+        );
+
+        // Sauvegarder l'utilisateur dans la BDD.
+        await User.create({
+            firstname,
+            lastname,
+            email,
+            password,// Le mot de passe est hashé dans notre modèle User avant enregistrement.
+            verificationToken,
+            // Le rôle "member" est attribué par défaut dans le modèle User.
+        });
+
+        await sendVerificationEmail(email, verificationToken, firstname)
+        res.status(201).json({ message: "Compte créé avec succès. Veuillez consulter votre boîte mail pour vérifier votre compte." })
     }
 }
