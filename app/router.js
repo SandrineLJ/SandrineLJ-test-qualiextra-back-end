@@ -8,11 +8,11 @@ import { isAdmin } from "./middlewares/isAdmin.js";
 export const router = Router();
 
 router.post("/login", cw(authController.loginUser));
-
 router.get("/private", isAuthed, (req, res) => {
     res.status(200).json({ message: `Hello ${req.user.firstname}` });
 });
 
+// Routes Admin.
 router.get("/users", isAuthed, isAdmin, cw(userController.getAll));
 router.get("/users/:id", isAuthed, isAdmin, cw(userController.getOne));
 router.patch("/users/:id", isAuthed, isAdmin, cw(userController.edit));
