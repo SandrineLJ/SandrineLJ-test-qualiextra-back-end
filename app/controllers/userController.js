@@ -54,7 +54,9 @@ export const userController = {
 
     async delete(req, res) {
         const userId = parseInt(req.params.id);
-        const user = await User.findByPk(userId);
+        const user = await User.findByPk(userId, {
+            attributes: { exclude: ["password"]}
+        });
 
         if (!user) {
             return res.status(404).json({ error: `L'utilisateur ${userId} n'existe pas.`});
@@ -66,6 +68,14 @@ export const userController = {
     },
 
     async getMe(req, res) {
+        // Récupérer l'id dans le token.
+        const userId = req.user.id;
 
+        // Appeler la BDD.
+        const user = await User.findByPk(userId, {
+            attributes: { exclude: ["password"] }
+        });
+
+        res.status(200).json(user);
     }
 }
