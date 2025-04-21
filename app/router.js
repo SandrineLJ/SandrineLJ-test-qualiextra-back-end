@@ -14,3 +14,5 @@ router.get("/private", isAuthed, (req, res) => {
 });
 
 router.get("/users", isAuthed, isAdmin, cw(userController.getAll));
+router.get("/users/:id", isAuthed, isAdmin, cw(userController.getOne));
+router.patch("/users/:id", isAuthed, isAdmin, cw(userController.edit));
