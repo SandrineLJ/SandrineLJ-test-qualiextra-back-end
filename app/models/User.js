@@ -17,7 +17,10 @@ User.init(
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
+            unique: true,
+            validate: {
+              isEmail: true,
+            }
           },
           password: {
             type: DataTypes.TEXT,
@@ -37,7 +40,7 @@ User.init(
           }
     }, {
         sequelize,
-        tableName: "user",
+        tableName: "users",
         // Hook pour hasher les mots de passe avant enregistrement en BDD
         hooks: {
           beforeCreate: async (user) => {

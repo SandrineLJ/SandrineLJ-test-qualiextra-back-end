@@ -5,12 +5,13 @@ import { userController } from "./controllers/userController.js";
 import { cw } from "./middlewares/controllerWrapper.js"
 import { isAuthed } from "./middlewares/isAuthed.js";
 import { isAdmin } from "./middlewares/isAdmin.js";
+import { validateEmail } from "./middlewares/validateEmail.js";
 
 
 export const router = Router();
 
 router.post("/login", cw(authController.loginUser));
-router.post("/signup", cw(authController.registerUser));
+router.post("/signup", validateEmail, cw(authController.registerUser));
 router.get("/verify", cw(authController.verifyUser))
 
 // Routes utilisateurs authentifiés (Admin ou standards).
