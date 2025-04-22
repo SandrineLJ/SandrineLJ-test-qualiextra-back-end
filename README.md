@@ -32,9 +32,10 @@ Blocage des emails temporaires ou jetables.
 
 #### 2. Cloner le projet dans un terminal et s'y déplacer :
  
-
- `npm git clone git@github.com:SandrineLJ/SandrineLJ-test-qualiextra-back-end.git`
- 
+ ```
+ npm git clone git@github.com:SandrineLJ/SandrineLJ-test-qualiextra-back-end.git
+ cd SandrineLJ-test-qualiextra-back-end
+```
 
 
 #### 3. Copier le fichier `.env.example` dans un fichier `.env` à la racine du projet et remplir les variables d'environnements.
