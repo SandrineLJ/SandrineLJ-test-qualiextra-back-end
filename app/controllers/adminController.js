@@ -28,7 +28,7 @@ export const adminController = {
             attributes: { exclude: ["password"] }
         });
 
-        // Si l'utilisateur n'existe pas, envoyer un message d'erreur.
+        // Si l'utilisateur n'existe pas, renvoyer vers le middleware notFound.
         if (!user) {
             return next();
         }

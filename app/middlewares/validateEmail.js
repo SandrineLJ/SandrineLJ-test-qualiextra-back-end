@@ -13,6 +13,7 @@ export function validateEmail(req, res, next) {
     // Vérifier si le domaine appartient à un services d'emails temporaires.
     const domain = email.split("@")[1];
     if (domains.includes(domain) || wildcardsDomains.some(wildcard => domain.endsWith(wildcard))) {
+        // Renvoyer un message d'erreur si c'est le cas.
         return res.status(400).json({ message: "Les adresses mails temporaires ne sont pas autorisées, merci de fournir un email valide." });
     }
     next();

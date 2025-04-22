@@ -1,13 +1,21 @@
 import nodemailer from "nodemailer";
 
+// Configurer le transporteur d'email via Mailtrap.
 const transporter = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
+    host: "sandbox.smtp.mailtrap.io", // Hôte SMTP de Mailtrap.
+    port: 2525,                       // Port SMTP pour les connexions sécurisées Mailtrap.
     auth: {
-        user: process.env.MAILTRAP_USER,
-        pass: process.env.MAILTRAP_PASS,
+        user: process.env.MAILTRAP_USER, // Identifiant Mailtrap stocké dans les variables d'environnement.
+        pass: process.env.MAILTRAP_PASS, // Mot de passe Mailtrap stocké dans les variables d'environnement.
     }
 });
+
+/**
+ * Fonction utilitaire pour envoyer un email de vérification
+ * @param {string} to - Adresse email du destinataire.
+ * @param {string} token - Jeton de vérification unique.
+ * @param {string} firstname - Prénom de l'utilisateur (pour personnaliser le message).
+ */
 
 export const sendVerificationEmail = async (to, token, firstname) => {
     // Créer le lien de vérification.

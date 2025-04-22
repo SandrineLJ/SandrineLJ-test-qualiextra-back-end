@@ -13,11 +13,12 @@ export function isAuthed(req, res, next) {
     }
 
     try {
-        // Décoder le token.
+        // Décoder le token avec la clé secrète.
         const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = tokenDecoded;
         next();
     } catch (error) {
+        // Envoyer un message d'erreur si le token est invalide ou expiré.
         return res.status(401).json({ error: "Token invalide ou expiré" });
     }
 }
