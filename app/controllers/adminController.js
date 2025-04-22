@@ -1,7 +1,7 @@
 import { User } from "../models/User.js";
 
 export const adminController = {
-    async getAllUsers(req, res) {
+    async getAllUsers(req, res,) {
         const users = await User.findAll({
             attributes: { exclude: ["password"] }
         });
@@ -9,19 +9,19 @@ export const adminController = {
         res.status(200).json(users);
     },
 
-    async getOneUser(req, res) {
+    async getOneUser(req, res, next) {
         const userId = parseInt(req.params.id);
         const user = await User.findByPk(userId, {
             attributes: { exclude: ["password"] }
         });
         if (!user) {
-            return res.status(404).json({ error: `L'utilisateur ${userId} n'existe pas.`});
+            return next();
         }
 
         res.status(200).json(user);
     },
 
-    async editUser(req, res) {
+    async editUser(req, res, next) {
         // Récupérer l'utilisateur en BDD.
         const userId = parseInt(req.params.id);
         const user = await User.findByPk(userId, {
@@ -30,7 +30,7 @@ export const adminController = {
 
         // Si l'utilisateur n'existe pas, envoyer un message d'erreur.
         if (!user) {
-            return res.status(404).json({ error: `L'utilisateur ${userId} n'existe pas.`});
+            return next();
         }
 
         // Récupérer les données modifiées.
@@ -46,14 +46,14 @@ export const adminController = {
         res.status(200).json(user);
     },
 
-    async deleteUser(req, res) {
+    async deleteUser(req, res, next) {
         const userId = parseInt(req.params.id);
         const user = await User.findByPk(userId, {
             attributes: { exclude: ["password"]}
         });
 
         if (!user) {
-            return res.status(404).json({ error: `L'utilisateur ${userId} n'existe pas.`});
+            return next();
         }
 
         await user.destroy();

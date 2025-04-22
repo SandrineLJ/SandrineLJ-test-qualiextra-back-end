@@ -86,7 +86,7 @@ export const authController = {
         res.status(201).json({ message: "Compte créé avec succès. Veuillez consulter votre boîte mail pour vérifier votre compte." })
     },
 
-    async verifyUser(req, res) {
+    async verifyUser(req, res, next) {
         const { token } = req.query;
 
         if (!token) {
@@ -101,7 +101,7 @@ export const authController = {
             const user = await User.findOne({ where: { email: decoded.email } });
 
             if (!user) {
-                return res.status(404).json({ message: "Utilisateur inconnu." });
+                return next();
             }
 
             // Vérifier si l'utilisateur est déjà vérifié.
