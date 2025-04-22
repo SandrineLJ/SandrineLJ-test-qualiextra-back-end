@@ -1,20 +1,66 @@
-**🚗 Contexte**
+# API REST Utilisateurs - test Qualiextra
 
-Création d'une API REST pour gérer des utilisateurs. Chaque utilisateur a un identifiant unique, un nom, un prénom, un email et un mot de passe. Une route `/login` permet de s'authentifier et une route `/private` (accessible uniquement aux utilisateurs connectés) retourne `"Hello ${prenom}"`.
+## Contexte
+Création d'une API REST pour gérer des utilisateurs. Chaque utilisateur a un identifiant unique, un nom, un prénom, un email et un mot de passe. Une route /login permet de s'authentifier et une route /private (accessible uniquement aux utilisateurs connectés) retourne "Hello ${prenom}".
 
-**🌟  Exigences** 
+## Fonctionnalités
+- Gestion des utilisateurs :
+  - Enregistrement, authentification, et gestion des profils utilisateurs.
+  - Gestion des rôles (Admin / Member).
+  - Vérification d'email lors de la création d'un compte.
+Blocage des emails temporaires ou jetables.
+- Rôles des utilisateurs :
+  - Un utilisateur peut être un "Member" ou un "Admin".
+  - Les admins peuvent voir un utilisateur, le modifier, le supprimer et lister l'ensemble des utilisateurs.
+  - Les utilisateurs standards peuvent seulement voir et modifier leur propre profil.
 
-Nous souhaitons que notre API intègre une gestion des rôles, un processus de vérification d'email et sois sécurisée.
+## Installation
 
-1. **Gestion des Rôles (Admin vs User) :**
-    - Introduire un rôle "Admin". Un utilisateur peut être soit un utilisateur standard, soit un administrateur.
-    - Seuls les administrateurs peuvent lister *tous* les utilisateurs, voir le détail d'un utilisateur spécifique , modifier un utilisateur et supprimer un utilisateur.
-    - Les utilisateurs standards peuvent uniquement voir et modifier *leur propre* profil.
-2. **Validation d'Email :**
-    - Lorsqu'un nouvel utilisateur crée son compte, son compte doit être marqué comme "non vérifié".
-    - Le système doit générer un token de vérification unique et l'associer à l'utilisateur.
-    - Une fois le compte créé en base, un email doit être envoyé à l'adresse fournie, contenant un lien unique incluant ce token.
-    - L'utilisateur ne peut pas se connecter  tant que son email n'est pas vérifié.
-3. **Blocage des Adresses Email Temporaires :**
-    - Lors de la création d'un compte, le système doit vérifier si le domaine de l'adresse email fournie appartient à un service d'emails jetables/temporaires connu (ex: mailinator.com, temp-mail.org, etc.).
-    - Si l'email provient d'un domaine temporaire identifié, l'inscription doit être refusée avec une erreur appropriée
+### Prérequis
+
+- Node.js (version 16 ou supérieure)
+- npm
+- PostgreSQL
+- Un compte (gratuit) sur le site https://mailtrap.io pour simuler la réception des emails
+
+### Etapes d'installation
+
+#### 1. Créer une base de données en local :
+- Se connecter à postgreSQL dans le terminal `postgres psql -U postgres`
+- Créer un utilisateur `CREATE ROLE user WITH LOGIN PASSWORD 'password';`
+- Créer la base de données `CREATE DATABASE db WITH OWNER user;`
+
+#### 2. Cloner le projet dans un terminal et s'y déplacer :
+ 
+
+ `npm git clone git@github.com:SandrineLJ/SandrineLJ-test-qualiextra-back-end.git`
+ 
+
+
+#### 3. Copier le fichier `.env.example` dans un fichier `.env` à la racine du projet et remplir les variables d'environnements.
+ ```
+ # Port du serveur
+ PORT=
+
+ # URL de la base de données
+ DB_URL=postgres://nom_d_ulisateur:mdp@localhost:5432/nom_de_la_bdd
+
+ # JWT secret pour la création des tokens
+ JWT_SECRET=votre_jwt_secret
+
+ MAILTRAP_USER=votre_mailtrap_user
+ MAILTRAP_PASS=votre_mailtrap_password
+ ```
+
+ #### 4. Installer les dépendances :
+ ```
+npm install
+```
+#### 5. Alimenter la base de données avec les fichiers test sync et seeding
+```
+npm run db:reset
+```
+#### 6. Démarrer le serveur :
+```
+npm run dev 
+```
