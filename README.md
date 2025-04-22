@@ -34,6 +34,8 @@ Blocage des emails temporaires ou jetables.
  
  ```
  npm git clone git@github.com:SandrineLJ/SandrineLJ-test-qualiextra-back-end.git
+ ```
+```
  cd SandrineLJ-test-qualiextra-back-end
 ```
 
