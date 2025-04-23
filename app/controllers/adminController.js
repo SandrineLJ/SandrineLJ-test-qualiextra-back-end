@@ -42,6 +42,7 @@ export const adminController = {
         if (role) { user.role = role };
         if (verified) { user.verified = verified };
 
+        await user.save()
         // Renvoyer les données à jour sans le mot de passe (car exclus de la requête API).
         res.status(200).json(user);
     },
